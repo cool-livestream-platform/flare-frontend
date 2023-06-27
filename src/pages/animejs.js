@@ -1,8 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import anime from 'animejs';
+import Particles from "react-particles";
+import { loadFull } from "tsparticles";
 
 export default function Home() {
+    const particlesInit = useCallback(async engine => {
+        console.log(engine);
+        await loadFull(engine);
+    }, []);
+
+    const particlesLoaded = useCallback(async container => {
+        await console.log(container);
+    }, []);
+
     const [email, setEmail] = useState('');
 
     const handleEmailChange = (event) => {
@@ -17,7 +28,7 @@ export default function Home() {
         const textAnimation = anime.timeline();
         textAnimation
             .add({
-                targets: '.logo',
+                targets: '.title',
                 opacity: [0, 1],
                 translateY: [-50, 0],
                 easing: 'easeOutExpo',
@@ -48,7 +59,7 @@ export default function Home() {
             </Head>
 
             <main className="text-center">
-                <h1 className="text-7xl font-bold mb-4 logo font-pt-sans">Flare</h1>
+                <h1 className="text-7xl font-bold mb-4 title font-pt-sans">Flare</h1>
                 <p className="text-2xl subtitle font-pt-sans">Coming Soon!</p>
                 <div className="mt-14">
                     <input
@@ -66,6 +77,78 @@ export default function Home() {
                     </button>
                 </div>
             </main>
+            <Particles
+                id="tsparticles"
+                init={particlesInit}
+                loaded={particlesLoaded}
+                options={{
+                    fpsLimit: 120,
+                    interactivity: {
+                        events: {
+                            onClick: {
+                                enable: false,
+                                mode: "push",
+                            },
+                            onHover: {
+                                enable: true,
+                                mode: "repulse",
+                            },
+                            resize: true,
+                        },
+                        modes: {
+                            push: {
+                                quantity: 4,
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4,
+                            },
+                        },
+                    },
+                    particles: {
+                        color: {
+                            value: "#ffffff",
+                        },
+                        links: {
+                            color: "#ffffff",
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.5,
+                            width: 1,
+                        },
+                        collisions: {
+                            enable: true,
+                        },
+                        move: {
+                            direction: "none",
+                            enable: true,
+                            outModes: {
+                                default: "bounce",
+                            },
+                            random: false,
+                            speed: 4,
+                            straight: false,
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                                area: 1000,
+                            },
+                            value: 80,
+                        },
+                        opacity: {
+                            value: 0.5,
+                        },
+                        shape: {
+                            type: "circle",
+                        },
+                        size: {
+                            value: { min: 1, max: 5 },
+                        },
+                    },
+                    detectRetina: true,
+                }}
+            />
         </div>
     );
 }
